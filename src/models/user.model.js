@@ -28,11 +28,11 @@ const userSchema = new mongoose.Schema(
             trim:true
         },
         avatat:{
-            type:String,
+            type:String,//url
             required:true
         },
         coverimage:{
-            type:String
+            type:String//url
         },
         watchHistory:[
             {
