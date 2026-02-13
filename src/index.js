@@ -47,7 +47,7 @@ connectDb()
 
 // (async ()=>{
 //     try{
-//         await mongoose.connect(`mongodb+srv://chirag:chirag123@learning.vvwrrqh.mongodb.net/learning`);
+//         await mongoose.connect(`${process.env.mongoDb}/${DB_NAME}`);
 
 //         app.on("error",(error)=>{
 //             console.log(error);

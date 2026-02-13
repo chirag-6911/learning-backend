@@ -7,7 +7,7 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 dotenv.config()
 
 
-console.log(process.env.mongoDb)
+
 
 
 const connectDb = async()=>{
