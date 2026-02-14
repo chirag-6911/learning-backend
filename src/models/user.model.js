@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+import { Schema } from "mongoose";
+dotenv.config()
 
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
     {
         
         username:{
@@ -36,7 +39,7 @@ const userSchema = new mongoose.Schema(
         },
         watchHistory:[
             {
-                type:mongoose.Schema.Types.ObjectId,
+                type:Schema.Types.ObjectId,
                 ref:"video"
             }
         ],
@@ -53,7 +56,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save",async function(next){
-    if(!this.isModified("password")) return next()
+    if(!this.isModified("password")) return 
     this.password=await bcrypt.hash(this.password,10)
 })
 
@@ -63,7 +66,7 @@ userSchema.methods.isPasswordCorrect = async function(password){
 }
 
 userSchema.methods.generateAccessToken = function(){
-    jwt.sign(
+    return jwt.sign(
         {
             _id: this._id,
             fullname: this.fullname,
@@ -71,12 +74,12 @@ userSchema.methods.generateAccessToken = function(){
             username: this.username
         },
         process.env.ACCESS_TOKEN_SECRET,{
-            expiresIn:ACCESS_TOKEN_EXPIRY
+            expiresIn:process.env.ACCESS_TOKEN_EXPIRY
         }
     )
 };
 userSchema.methods.generateRefreshToken = function(){
-    jwt.sign(
+    return jwt.sign(
         {
             _id:this._id
         },
@@ -88,4 +91,4 @@ userSchema.methods.generateRefreshToken = function(){
 
 
 
-export const userModel = mongoose.model("user",userSchema);
+export const userModel = mongoose.model("userModel",userSchema);
