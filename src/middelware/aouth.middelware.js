@@ -8,11 +8,11 @@ import cookieParser from "cookie-parser";
 
 export const verifyJWT = asyncHandler(async(req,res,next) => {
     try {
-        console.log(req.cookies.accessToken)
+        // console.log(req.cookies.accessToken)
         const token=req.cookies?.accessToken || req.header("authentication")?.replace("bearer","")
-        console.log(token)
+        // console.log(token)
         if(!token){
-            console.log(token)
+            // console.log(token)
             throw new ApiError(401,"unauthorized request")
         }
         
@@ -28,7 +28,7 @@ export const verifyJWT = asyncHandler(async(req,res,next) => {
         req.user = user;
         next()
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw new ApiError(401,"invalid Accesstoken")
     }
 })

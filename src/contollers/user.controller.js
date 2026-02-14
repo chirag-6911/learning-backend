@@ -175,8 +175,55 @@ const logOutUser = asyncHandler(async(req,res)=>{
         new ApiResponse(200,{},"user loggedout")
     )
 })
+
+const refreshAccessToken =asyncHandler(async(req,res)=>{
+    const incomingRefreshToken=req.cookies.refreshToken || req.body.refreshToken
+
+    if(!incomingRefreshToken){
+        throw new ApiError(401,"unaouthoriezed request")
+    }
+
+
+    try {
+        const decodedToken=jwt.verify(
+            incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET
+        )
+    
+        const user=await userModel.findById(decodedToken?._id)
+        if(!user){
+            throw new ApiError(401,"invalid refesh token")
+        }
+        // console.log("incomingToken=",incomingRefreshToken);
+        // console.log("userToken=",user?.refreshToken);
+        if(incomingRefreshToken !== user?.refreshToken){
+            throw new ApiError(401,"token expired or user")
+        }
+    
+        const options ={
+            httpOnly:true,
+            secure:true
+        }
+    
+        const {accessToken,newRefreshToken}=await generateaccessAndRefreshToken(user._id)
+    
+        return res
+        .status(200)
+        .cookie("accessToken",accessToken,options)
+        .cookie("newRefreshToken",newRefreshToken,options)
+        .json(
+            new ApiResponse(
+                200,
+                {accessToken,refreshToken:newRefreshToken},
+                "access token refresh"
+            )
+        )
+    } catch (error) {
+        throw new ApiError(401,error?.message || "invalid refesh token")
+    }
+})
 export {
     registerUser,
     loginUser,
-    logOutUser
+    logOutUser,
+    refreshAccessToken
 };
