@@ -28,14 +28,14 @@ router.route("/logout").post(verifyJWT,logOutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 
 router.route("/changePassword").post(verifyJWT,changeCurrentPassword)
-router.route("/current-user").post(verifyJWT,getCurrentUser)
+router.route("/current-user").get(verifyJWT,getCurrentUser)
 router.route("/update-userdetails").patch(verifyJWT,updateUserDetail)
 router.route("/update-avatar").patch(verifyJWT,upload.single("avatar"),updateAvatar)
 router.route("/update-coverimage").patch(verifyJWT,upload.single("coverimage"),updateCoverImage)
 
 
 router.route("/c/:username").get( getUserChannelProfile)
-rotuter.Router("/history").get(verifyJWT,getWatchHistory)
+router.route("/history").get(verifyJWT,getWatchHistory)
 
 
 
